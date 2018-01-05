@@ -1,6 +1,6 @@
 import os
-import ftplib
-from ftplib import FTP
+import ftplib_edited
+from ftplib_edited import FTP
 import zipfile
 import sys
 import getpass
@@ -24,31 +24,25 @@ class colors: #Has a list of colors that are used by the program.
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
 
-def getTransfSpeed(filename):
-    if type(filename) == type(list()):
-        for file in filename:
-            try:
-                startime = datetime.datetime.now()
-                filesize = ftp.size(file)
-                endtime = datetime.datetime.now()
-                break
-            except:
-                continue
-        else:
-            return "Cannot Calculate", "Cannot Calculate"
-    else:
-        startime = datetime.datetime.now()
-        filesize = ftp.size(filename)
-        endtime = datetime.datetime.now()    
-    stringsize = sys.getsizeof(filesize)
-    transfspeed = stringsize / (((endtime - startime)/2).total_seconds())
-    return str(transfspeed), str(filesize/transfspeed)
+def send(filename):
+    try:
+        file = open('%s' % filename , 'rb')
+    except FileNotFoundError as e:
+        print(e)
+        return False
+    print("Starting transfer....")
+    startime = datetime.datetime.now()
+    ftp.storbinary('STOR %s' % filename, file)
+    endtime = datetime.datetime.now()
+    time = (endtime-startime).total_seconds()
+    file.close()
+    print("\nSent to ", ftp.pwd(), " In ", time)
 
-def download(filename):#This function is to retrieve or download a file from the ftp.
+def download(filename): 
     file = open("%s" % filename, "wb")
     startime = datetime.datetime.now()
     try:#Added this, because when downloading a file that does not exist program crashes. (Date: 7 March 2017, Day: Tuesday, Time: 14:42:28)
-        ftp.retrbinary("RETR %s" % filename, file.write)
+        ftp.retrbinary("RETR %s" % filename, file.write, ftp.size(filename))
     except Exception as e:
         print(e)
         file.close
@@ -57,7 +51,7 @@ def download(filename):#This function is to retrieve or download a file from the
     endtime = datetime.datetime.now()
     time = (endtime-startime).total_seconds()
     file.close()
-    print("Downloaded to ", os.getcwd(), " In ", time)
+    print("\nDownloaded to ", os.getcwd(), " In ", time)
 
 def connect(ipAddress, port=21): # The connect code was being repeted twice, so i made a function.
     global ftp
@@ -78,7 +72,9 @@ def connect(ipAddress, port=21): # The connect code was being repeted twice, so 
     except Exception as e:
         print(e)
 
-connect(input("Enter IP: "))
-dl_list = ['','','','']
-p = multiprocessing.Pool(4)
-p.map(download, dl_list)
+
+
+
+
+
+
