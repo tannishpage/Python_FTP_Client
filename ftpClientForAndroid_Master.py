@@ -118,6 +118,9 @@ Update Notes:
     -Added two new functions its a small feature that could be helpful. connection_history and list_connection_history these functions will store and list out any successful connections that have been made like a history. All this will be stored in a file called history in the documents folder in windows. (Date: 21 November 2017, Day: Tuesday, Time: 22:28:17)
     -Fixed zipsend command with the *. What happended was when the * was passed it would zip and send all the folders in a direcotry but for some reason this was not happending when done individually it would be fine but with the star it would create fiels of sizes greater 1GB so i fixed this by making the zip function not send anything but only make the zipped folder and made another function that does the sending. The dir_zip function will use the zip function to make to zip all the folders this fixed the issue. (Date: 22 November 2017, Day: Wednesday, Time: 08:01:28)
     -Added a progress bar. Now this program no longer uses the default ftplip file that comes with python default. I made some changes to the ftplib file which is now called ftplib_edited.py This file will come with the program when downloaded from gtihub. (Date: 5 January 2018, Day: Friday, Time: 13:51:38)
+    -Made a change to the progress bar. Also tested out the zipsend * command it seems to be working fine. I am not sure what the issue was. But i think it is no longer existant. Maybe its because I split the zipsend functions up??? Who knows. (Date: 10 February 2018, Day: Saturday, Time: 14:47:15)
+    -Added a rm command which removes a file on the local machine. (Date: 10 Februrary 2018, Day: Saturday, Time: 15:08:45)
+    -Now Additional information is displayed when lls is executed like if its a file or directory and the size of files. (Date: 10 Febuary 2018, Day: Saturday, Time: 17:27:10)
 
 Development Progress:
     -Script In Development 0.1v (Date: 21 January 2017, Day: Saturday, Time: 20:15:00)
@@ -138,9 +141,9 @@ Development Progress:
     -Script Over Developed v2.3 (Date: 1 September 2017, Day: Friday, Time: 18:32:34)
     -Script Over Developed v2.4 (Date: 22 November 2017, Day: Wednesday, Time: 09:05:17)
     -Script Over Developed v2.5 (Date: 5 January 2017, Day: Friday, Time: 15:51:30)
+    -Script Over Developed v2.6 (Date: 10 Februrary 2018, Day: Saturday, Time: 18:27:10) 
 
 Planned Additions or fixes:
-    -Fixes Zipsend function with the * for some reason is not working. Experiment and fix it.
 
 All that need testing:
 
@@ -289,7 +292,7 @@ def send(filename):#This function is used to send files or .zip files to the ftp
         endtime = datetime.datetime.now()
         time = (endtime-startime).total_seconds()
         file.close()
-        print("Sent to ", ftp.pwd(), " In ", time)
+        print("\nSent to ", ftp.pwd(), " In ", time)
 
 def download(filename):#This function is to retrieve or download a file from the ftp.
     if filename == '*':
@@ -338,18 +341,18 @@ def download(filename):#This function is to retrieve or download a file from the
         print("\nDownloaded to ", os.getcwd(), " In ", time)
 
 def sls():#sls stands for Server List, it is the ls command but for server side. It lists all directories and files on the server.
-    serverList = ftp.nlst()
-    print("\n".rstrip())
-    for fileN in serverList:
-        print(fileN)
-    print()
+    ftp.retrlines('LIST')
 
 def lls():#lls stands for Local List, it is the ls command but on local mechine.
-    localList = os.listdir(os.getcwd())
-    print("\n".rstrip())
-    for fileN in localList:
-        print(fileN)
-    print()
+    directories = [x for x in os.listdir(os.getcwd()) if os.path.isdir(x)]
+    files = [x for x in os.listdir(os.getcwd()) if os.path.isfile(x)]
+    for x in directories:
+        print(colors.BOLD + "{}: Type: Folder".format(x) + colors.END)
+    for x in files:
+        file = open(x, "r")
+        file.seek(0,2)
+        print("{}: Type: File | Size: {}KB".format(x, file.tell()/1000))
+        file.close()
 
 def scd(path):#scd stands for Server Change Directory. cd command but for server.
     print("Old Server Working Directory: {}".format(ftp.pwd()))
@@ -402,7 +405,7 @@ def connect(ipAddress, port=21): # The connect code was being repeted twice, so 
         bytes, time = getTransfSpeed(ftp.nlst()) #Will list all files on ftp and try to get speed of one of them.
         welcome = ftp.getwelcome() #Now prints out welcome message.
         print(colors.GREEN + "Login Successful.\nConnected to: %s\nConnection Speed: %s b/s\nWelcome Message: %s" % (ipAddress,bytes,welcome) + colors.END) # This line is fixed. (Date: 22 March 2017, Day: Wednesday, Time: 08:27:35)
-        connection_history(ipAddress)
+        #connection_history(ipAddress)
     except Exception as e:
         print(e)
 
@@ -440,7 +443,7 @@ def lsize(filename):
     print(colors.GREEN + "\nFile Name: {0}\nFile Size: {1} bytes\nAvg Transfer Speed: {2} bytes/seconds\nAvg time of transfer: {3} seconds".format(filename, filesize, transfSpeed, transfTime) + colors.END)
     file.close()
 
-def getTransfSpeed(filename):
+def getTransfSpeed(filename):#Gets the connection speed between client and the server
     if type(filename) == type(list()):
         for file in filename:
             try:
@@ -456,8 +459,8 @@ def getTransfSpeed(filename):
         startime = datetime.datetime.now()
         filesize = ftp.size(filename)
         endtime = datetime.datetime.now()    
-    stringsize = sys.getsizeof(filesize)
-    transfspeed = stringsize / (((endtime - startime)/2).total_seconds())
+    stringsize = len(str(filesize))
+    transfspeed = stringsize / ((((endtime - startime)).total_seconds())/2)
     return str(transfspeed), str(filesize/transfspeed)
 
 def help():
@@ -465,7 +468,7 @@ def help():
     print("command list: ")
     print(cmdlst)
 
-def connection_history(ipAddress): #This function will store a history of all the SUCCESSFUL CONNECTIONS ONLY
+'''def connection_history(ipAddress): #This function will store a history of all the SUCCESSFUL CONNECTIONS ONLY
     date = str(datetime.datetime.now()).split()[0]
     try:
         file = open('{}\\history'.format(os.path.expandvars('%userprofile%\\Documents')), 'a')
@@ -483,7 +486,7 @@ def list_connection_history(): #This function will return the history of all the
         return False
     addresses = file.read()
     print(addresses)
-    file.close()
+    file.close()'''
 '''-------------------------------------------- Logic -------------------------------------------------------------------'''
 
 while True:
@@ -546,6 +549,12 @@ while True:
 
     elif command == "rmdir":
         rmdir(arguments)
+
+    elif command == "rm":
+        try:
+            os.remove(arguments)
+        except PermissionError:
+            print(colors.RED + "Err Permission Denied to remove: {}".format(arguments) + colors.END)
 #=================End File Manipulation===============
 
 
@@ -563,6 +572,7 @@ while True:
     elif command == "zipsend":
         if arguments == '*':
             dir_zip_folder()
+            continue
         try:
             zipsend(arguments)
         except Exception as e:
@@ -610,8 +620,6 @@ while True:
     elif command == "help":
         help()
 
-    elif command == "history":
-        list_connection_history()
 #====================End Misc=========================
 
     else:

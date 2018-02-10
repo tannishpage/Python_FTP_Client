@@ -6,7 +6,47 @@ import sys
 import getpass
 import datetime
 import multiprocessing #This is an experiment
+'''
+Test Results:
+-------------------- One -------------------------
+    Blocksize 8192 bytes
+    Internet speed 128KB/s (1024Kb/s)
+    Downloaded 0.144MB in 1 Min
+-------------------- End One -------------------------
 
+-------------------- Two -------------------------
+    Blocksize 1024 bytes
+    Internet speed 128KB/s (1024Kb/s)
+    Downloaded 0.094MB in 1 Min
+-------------------- End Two -------------------------
+
+-------------------- Three -------------------------
+    Blocksize 512 bytes
+    Internet speed 128KB/s (1024Kb/s)
+    Downloaded 0.05MB in 1 Min
+-------------------- End Three -------------------------
+
+-------------------- Four -------------------------
+    Blocksize 256 bytes
+    Internet speed 128KB/s (1024Kb/s)
+    Downloaded 0.046MB in 1 Min
+-------------------- End Four -------------------------
+
+-------------------- Five -------------------------
+    Blocksize 128 bytes
+    Internet speed 128KB/s (1024Kb/s)
+    Downloaded 0.396MB in 1 Min
+-------------------- End Five -------------------------
+
+    Blocksize 8 bytes
+    Internet speed 128KB/s (1024Kb/s)
+    Downloaded 0.045MB in 1 Min
+
+    Blocksize 1 bytes
+    Internet speed 128KB/s (1024Kb/s)
+    Downloaded 0.03MB in 1 Min
+
+'''
 class colors: #Has a list of colors that are used by the program.
     BLUE = '\033[34m'
     RED = '\033[31m'
@@ -61,8 +101,8 @@ def connect(ipAddress, port=21): # The connect code was being repeted twice, so 
     except Exception as e:#Add the acctual error
         print(e)
         return False
-    username = input(colors.FAIL + "Username: ")
-    password = getpass.getpass("Password: " + colors.END)
+    username = '' #input(colors.FAIL + "Username: ")
+    password = '' #getpass.getpass("Password: " + colors.END)
     try:
         ftp.login(username, password)
         bytes, time = getTransfSpeed(ftp.nlst()) #Will list all files on ftp and try to get speed of one of them.
@@ -72,7 +112,10 @@ def connect(ipAddress, port=21): # The connect code was being repeted twice, so 
     except Exception as e:
         print(e)
 
-
+connect('speedtest.tele2.net')
+download('100MB.zip')
+ftp.cwd('upload')
+send('100MB.zip')
 
 
 
