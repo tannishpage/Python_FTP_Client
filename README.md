@@ -5,7 +5,7 @@ as a user your responsibility is to report any bugs to me either here on git or 
 I will acknowledge your report and fix it as soon as I can.
 
 
-Now that out of the way. Using the program is very simple.
+Now thats out of the way. Using the program is very simple.
 Here is a list of commands:
 
 ## Nvigation
@@ -23,7 +23,7 @@ Here is a list of commands:
 | ---------------------- | ------------------------------ |
 | `del <file_name>`      | Deletes filename on server     |
 | `make <folder_name>`   | Makes a folder on server       |
-| `rmdir <folder_name> ` | Deletes a folder on the server |
+| `rmdir <folder_name>`  | Deletes a folder on the server |
 
 ## File Transfer 
 
@@ -35,12 +35,12 @@ Here is a list of commands:
 
 ## Connection
 
-| Command                | Description                            |
-| ---------------------- | -------------------------------------- |
-| `connect <ip_Address>` | Connects to passed ip address          |
-| `lsize <file_name>`    | GIves an estimate for the time to send |
-| `ssize <file_name>`    | Gives an estimate for time to send     |
-| `quit`                 | Closes connection to the server        |
+| Command                | Description                                |
+| ---------------------- | ------------------------------------------ |
+| `connect <ip_Address>` | Connects to passed ip address              |
+| `lsize <file_name>`    | Gives an estimate for the time to retrieve |
+| `ssize <file_name>`    | Gives an estimate for time to send         |
+| `quit`                 | Closes connection to the server            |
 
 ## Misc.
 
