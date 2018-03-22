@@ -101,8 +101,8 @@ def connect(ipAddress, port=21): # The connect code was being repeted twice, so 
     except Exception as e:#Add the acctual error
         print(e)
         return False
-    username = '' #input(colors.FAIL + "Username: ")
-    password = '' #getpass.getpass("Password: " + colors.END)
+    username = 'tannishpage' #input(colors.FAIL + "Username: ")
+    password = getpass.getpass("Password: " + colors.END)
     try:
         ftp.login(username, password)
         bytes, time = getTransfSpeed(ftp.nlst()) #Will list all files on ftp and try to get speed of one of them.
@@ -112,10 +112,10 @@ def connect(ipAddress, port=21): # The connect code was being repeted twice, so 
     except Exception as e:
         print(e)
 
-connect('speedtest.tele2.net')
+connect('localhost')
 download('100MB.zip')
-ftp.cwd('upload')
-send('100MB.zip')
+#ftp.cwd('upload')
+#send('100MB.zip')
 
 
 

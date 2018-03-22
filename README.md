@@ -51,7 +51,7 @@ Here is a list of commands:
 | `exit`    | Quits the program                              |
 | `help`    | Prints this help message                       |
 
-The list shown above will appear if the `help` command is entered into the program. If you have ever used a `UNIX` based OS's `cli` before these commands should sound familiar to you. But if you are still unsure here's a linke to a tutorial video: https://youtu.be/54OZIGqI8v8
+The list shown above will appear if the `help` command is entered into the program. If you have ever used a `UNIX` based OS's `cli` before these commands should sound familiar to you. But if you are still unsure here's a linke to a tutorial video: <LINK TO VIDEO>
 
 If you would like to contribute to this project with any bug fixes, new features or would like to work with me in a
 colaboration contact me at  tannishpage1@gmail.com and I will get back to you as soon as I can. Now go on enjoy the wonders of the world. :)

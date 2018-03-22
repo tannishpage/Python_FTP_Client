@@ -144,6 +144,7 @@ Development Progress:
     -Script Over Developed v2.6 (Date: 10 Februrary 2018, Day: Saturday, Time: 18:27:10) 
 
 Planned Additions or fixes:
+    -Plan to open a thread for downloading and uploading. (Date: 17 February 2018, Day: Saturday, Time: 11:42:00)
 
 All that need testing:
 
@@ -162,6 +163,7 @@ import sys
 import getpass
 import datetime
 import multiprocessing #This is an experiment
+import threading #Plan to open a thread for downloading and uploading. (Date: 17 February 2018, Day: Saturday, Time: 11:42:00)
 
 
 '''-------------------------------------------------------Classes---------------------------------------------------------------------------'''
