@@ -433,7 +433,7 @@ class FTP:
             s = resp[3:].strip()
             return int(s)
 
-    def retrbinary(self, cmd, callback, file_size, blocksize=8192, rest=None):
+    def retrbinary(self, cmd, callback, file_size, blocksize=8129, rest=None):
         """Retrieve data in binary mode.  A new port is created for you.
 
         Args:
@@ -451,7 +451,7 @@ class FTP:
         percent = 0 # Code by Tannishpage
         self.voidcmd('TYPE I')
         with self.transfercmd(cmd, rest) as conn:
-            sys.stdout.write('\rDownloading: [{}] 0.000% | 0MB/{:.3f}MB Speed: Time left: '.format('.'*15,file_size/1000000)) # Code by Tannishpage
+            sys.stdout.write('\rDownloading: [{}] 0.000% | 0MB/{:.3f}MB Speed: Time left: '.format('.'*50,file_size/1000000)) # Code by Tannishpage
             sys.stdout.flush()
             start = time.clock()
             while 1:
@@ -462,9 +462,9 @@ class FTP:
                 size_ = size_ + len(data)
                 percent = 100 * (size_/file_size)
                 bytes_left = file_size - size_
-                speed = (size_/(time.clock() - start))
+                speed = (size_//(time.clock() - start))/10000
                 time_ = bytes_left/speed
-                sys.stdout.write('\rDownloading: [{0}{1}] {2:.1f}% | {3:.1f}MB/{4:.1f}MB Speed: {5:.1f}B/s Time left: {6:.1f}s'.format('='*int(percent/6), '.' * (15 - int(percent/6)), percent, size_/1000000, file_size/1000000, speed, time_)) # Code by Tannishpage
+                sys.stdout.write('\rDownloading: [{0}{1}] {2:.3f}% | {3:.3f}MB/{4:.3f}MB Speed: {5:.3f}KB/s Time left: {6:.3f}s'.format('='*int(percent/2), '.' * (50 - int(percent/2)), percent, size_/1000000, file_size/1000000, speed, time_)) # Code by Tannishpage
                 sys.stdout.flush()
             # shutdown ssl layer
             if _SSLSocket is not None and isinstance(conn, _SSLSocket):
